@@ -77,5 +77,6 @@ END=$(date +%s)
 DURATION=$((END - START))
 
 # Print total time taken
+echo
 echo "--> Time taken: $DURATION seconds"
 echo
