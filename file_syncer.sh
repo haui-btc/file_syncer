@@ -41,17 +41,34 @@ spinner() {
     printf "                            \b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b"
 }
 
-# Execute rsync in the background and save the output
-rsync $OPTS "$SRC1" "$DST1" 2>&1 | grep -v 'failed: Invalid argument (22)' > /tmp/out1 & PID1=$!
-rsync $OPTS "$SRC2" "$DST2" 2>&1 | grep -v 'failed: Invalid argument (22)' > /tmp/out2 & PID2=$!
-
-# Start the spinner
-spinner $PID1
-spinner $PID2
-
-# Wait for rsync to finish
-wait $PID1
-wait $PID2
+# Loop over each source and destination
+for i in "${!SRC[@]}"; do
+  # Execute rsync in the background and save the output
+  rsync $OPTS "${SRC[$i]}" "${DST[$i]}" 2>&1 | grep -v 'failed: Invalid argument (22)' > /tmp/out$i & PID=$!
+  
+  # Start the spinner
+  spinner $PID
+  
+  # Wait for rsync to finish
+  wait $PID
+  
+  # Save the folder name in a variable
+  BASE=$(basename "${SRC[$i]}")
+  
+  # Read the output from the tmp files
+  OUT=$(cat /tmp/out$i)
+  
+  # Use grep to extract the number of files transferred
+  NUM_FILES=$(echo "$OUT" | grep 'Number of regular files transferred' | awk '{print $6 }')
+  
+  # Print the result for each source and destination
+  echo
+  echo "<<<< Copying finished for Source $i >>>>"
+  echo "--> Copied $NUM_FILES files to $BASE"
+  
+  # Remove the tmp files
+  rm /tmp/out$i
+done
 
 # Get end time
 END=$(date +%s)
@@ -59,21 +76,6 @@ END=$(date +%s)
 # Calculate duration
 DURATION=$((END - START))
 
-# Read the output from the tmp files
-OUT1=$(cat /tmp/out1)
-OUT2=$(cat /tmp/out2)s
-
-# Use grep to extract the number of files transferred
-NUM_FILES1=$(echo "$OUT1" | grep 'Number of regular files transferred' | awk '{print $6 }')
-NUM_FILES2=$(echo "$OUT2" | grep 'Number of regular files transferred' | awk '{print $6 }')
-
-# Print the result
-echo
-echo "<<<< Copying finished >>>>"
-echo "--> Copied $NUM_FILES1 files to $BASE1"
-echo "--> Copied $NUM_FILES2 files to $BASE2"
+# Print total time taken
 echo "--> Time taken: $DURATION seconds"
 echo
-
-# Remove the tmp files
-rm /tmp/out1 /tmp/out2

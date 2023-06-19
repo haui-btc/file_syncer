@@ -1,29 +1,36 @@
 # Bash Script for Rsync
 
-This repository contains a bash script that uses rsync for synchronizing files between two directories located at different paths. The paths for these directories are loaded from a configuration file (paths.conf), enabling easy management and modification of source and destination paths.
+This repository contains a bash script that uses rsync for synchronizing files between multiple directories. The paths for these directories are loaded from a configuration file (paths.conf), enabling easy management and modification of source and destination paths.
 
 ## How it works
 
 The script performs the following tasks:
 
 1. Loads source and destination paths from paths.conf.
-2. Uses rsync to copy files from the source to the destination directory.
-3. Provides a spinning progress indicator while the copying operation is ongoing.
-4. Calculates and displays the number of files copied and the total time taken for the operation.
+2. Loops over each source-destination pair and uses rsync to copy files from each source to its corresponding destination directory.
+3. Provides a spinning progress indicator while the copying operation is ongoing for each pair.
+4. Calculates and displays the number of files copied and the total time taken for all operations.
 
 ## Configuration
 
 The paths.conf file should contain the source and destination directories for the rsync operations in the following format:
 
 ```bash
-SRC1="/path/to/source/directory/1"
-DST1="/path/to/destination/directory/1"
-
-SRC2="/path/to/source/directory/2"
-DST2="/path/to/destination/directory/2"
+SRC[i]="/path/to/source/directory/i"
+DST[i]="/path/to/destination/directory/i"
 ```
 
-Please replace "/path/to/source/directory/1", "/path/to/destination/directory/1", "/path/to/source/directory/2", and "/path/to/destination/directory/2" with your actual directory paths.
+Replace i with the index number and /path/to/source/directory/i and /path/to/destination/directory/i with your actual directory paths. You can add as many source-destination pairs as you need by incrementing the index i.
+
+For example:
+
+```bash
+SRC[0]="/home/username/documents/"
+DST[0]="/media/username/backup/documents"
+
+SRC[1]="/home/username/pictures/"
+DST[1]="/media/username/backup/pictures"
+```
 
 ## Running the script
 
