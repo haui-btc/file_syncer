@@ -14,6 +14,7 @@ The script performs the following tasks:
 ## Configuration
 
 The paths.conf file should contain the source and destination directories for the rsync operations in the following format:
+(rename 'paths_template.conf' to 'paths.conf')
 
 ```bash
 SRC[i]="/path/to/source/directory/i"
