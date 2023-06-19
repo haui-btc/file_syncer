@@ -63,9 +63,11 @@ for i in "${!SRC[@]}"; do
   
   # Print the result for each source and destination
   echo
+  echo ##########################################
   echo "<<<< Copying finished for Source $i >>>>"
   echo "--> Copied $NUM_FILES files to $BASE"
-  
+  echo ------------------------------------------
+
   # Remove the tmp files
   rm /tmp/out$i
 done
@@ -78,5 +80,5 @@ DURATION=$((END - START))
 
 # Print total time taken
 echo
-echo "--> Time taken: $DURATION seconds"
+echo "Time taken: $DURATION seconds"
 echo
