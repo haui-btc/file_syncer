@@ -16,12 +16,8 @@ handle_error() {
 # Call handle_error() function when the script exits with an error
 trap 'handle_error $LINENO' ERR
 
-# Source and destination folders
-SRC1="XYZ"
-DST1="XYZ"
-
-SRC2="XYZ"
-DST2="XYZ"
+# Load source and destination folders from a configuration file
+source paths.conf
 
 # Save the Foldername in a variable
 BASE1=$(basename "$SRC1")
