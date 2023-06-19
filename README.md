@@ -11,7 +11,7 @@ The script performs the following tasks:
 3. Provides a spinning progress indicator while the copying operation is ongoing for each pair.
 4. Calculates and displays the number of files copied and the total time taken for all operations.
 
-![Screenshot](screenshot1.png)
+![Screenshot](Pictures/screenshot1.png)
 
 ## Configuration
 
