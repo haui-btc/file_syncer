@@ -20,7 +20,7 @@ The paths.conf file should contain the source and destination directories for th
 
 ```bash
 SRC[i]="/path/to/source/directory/i"
-DST[i]="/path/to/destination/directory/i"
+DST[i]="/path/to/destination/directory/"
 ```
 
 Replace i with the index number and /path/to/source/directory/i and /path/to/destination/directory/i with your actual directory paths. You can add as many source-destination pairs as you need by incrementing the index i.
@@ -29,10 +29,10 @@ For example:
 
 ```bash
 SRC[0]="/home/username/documents/"
-DST[0]="/media/username/backup/documents"
+DST[0]="/media/username/backup/"
 
 SRC[1]="/home/username/pictures/"
-DST[1]="/media/username/backup/pictures"
+DST[1]="/media/username/backup/"
 ```
 
 ## Running the script
