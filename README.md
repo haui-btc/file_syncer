@@ -11,8 +11,6 @@ The script performs the following tasks:
 3. Provides a spinning progress indicator while the copying operation is ongoing for each pair.
 4. Calculates and displays the number of files copied and the total time taken for all operations.
 
-![Screenshot](Pictures/screenshot1.png)
-
 ## Configuration
 
 The paths.conf file should contain the source and destination directories for the rsync operations in the following format:
