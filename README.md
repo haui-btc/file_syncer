@@ -69,6 +69,12 @@ In order for your current terminal to recognize the new alias, you need to sourc
 source ~/.bashrc
 ```
 
+Now you can start your backup by simply typing
+
+```bash
+backup
+```
+
 ## Error Handling
 
 The script uses a trap command to catch errors and will print the line number where the error occurred.
