@@ -47,6 +47,28 @@ Please ensure that the script has execute permissions. If not, you can add execu
 chmod +x script.sh
 ```
 
+### Create an alias to run the script
+
+Open your .bashrc file in a text editor.
+
+```bash
+vim ~/.bashrc
+```
+
+Go to the end of the file and add the following line:
+
+```bash
+alias backup='/PATH/TO/YOUR/file_syncer.sh'
+```
+
+Save the file and exit the editor.
+
+In order for your current terminal to recognize the new alias, you need to source your .bashrc file with the following command:
+
+```bash
+source ~/.bashrc
+```
+
 ## Error Handling
 
 The script uses a trap command to catch errors and will print the line number where the error occurred.
