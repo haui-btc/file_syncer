@@ -1,22 +1,25 @@
-# Bash script to backup local files on a NAS
-## How it works
+# Bash Script for Local to NAS File Backup
+This project provides a Bash script designed for automating the backup of files from a local system to a Network-Attached Storage (NAS) unit. It's built with simplicity, efficiency, and robust error handling in mind.
 
-- This project utilizes a Bash script for automating the file backup process from a local computer to a NAS (Network-Attached Storage).
-- The core of the synchronization is handled by rsync, a powerful tool that ensures only the differences (new or updated files) are transferred. This efficiency reduces both the time needed for backups and the overall network traffic.
-- It allows for explicit control over file permissions and ownership when files are copied to the NAS, making sure that files are both accessible and manageable according to user preferences or requirements.
+## How It Works
+- **Automated Backup**: Utilizes a Bash script to streamline the file backup process from local systems to NAS devices.
+- **Efficient Synchronization**: Employs `rsync` for intelligent file transfer, ensuring only differences are sent to minimize network load and speed up backups.
+- **Permission Control**: Offers explicit control over the permissions and ownership of the transferred files, ensuring they remain accessible and manageable on the NAS.
 
 ## Process Overview
-1. **Start Script**: Upon execution, the script reads source and destination paths from a configuration file.
-2. **Error Handling**: Implements robust error handling to terminate the operation if any command within the script fails, logging the error for troubleshooting.
-3. **File Synchronization**: For each source-destination pair defined in the configuration, the script uses rsync with specific options to sync the files. It provides feedback on the operation's progress and final statistics.
-4. **Completion**: Upon successfully copying all files, the script calculates and displays the total execution time.
+1. **Initialization**: On execution, reads source and destination paths from the `paths.conf` configuration file.
+2. **Robust Error Handling**: Implements stringent error checks, terminating and logging on any failures to facilitate troubleshooting.
+3. **Synchronization**: Executes `rsync` for each source-destination pair, offering real-time progress feedback and summarizing transfer statistics upon completion.
+4. **Completion**: Calculates and displays the total time taken for the backup process.
+
+
 
 ## Configuration
 ### Prerequisites
-- Bash shell
-- rsync installed on both local and NAS systems
-- Network access to the NAS
-- Permissions to read from the source and write to the destination paths
+- Bash shell environment.
+- `rsync` installed on both the local and NAS systems.
+- Network connectivity with the NAS.
+- Appropriate permissions for accessing source locations and writing to destinations.
 
 ## Setup
 ### Setting Up paths.conf
