@@ -1,7 +1,4 @@
-# Bash Script for Rsync
-
-This repository contains a bash script that uses rsync for synchronizing files between multiple directories. The paths for these directories are loaded from a configuration file (paths.conf), enabling easy management and modification of source and destination paths.
-
+# Bash script to backup local files on a NAS
 ## How it works
 
 - This project utilizes a Bash script for automating the file backup process from a local computer to a NAS (Network-Attached Storage).
@@ -9,41 +6,29 @@ This repository contains a bash script that uses rsync for synchronizing files b
 - It allows for explicit control over file permissions and ownership when files are copied to the NAS, making sure that files are both accessible and manageable according to user preferences or requirements.
 
 ## Configuration
-
+### Setting Up paths.conf
 To configure the script for your environment, you need to create a paths.conf file.
+( **It should be located in the same directory as your backup script**)
 > rename 'paths_template.conf' to 'paths.conf'
+```bash
+declare -a SRC=(
+    "/path/to/local/directory1/"
+    "/path/to/local/directory2/"
+    ...
+)
+
+declare -a DST=(
+    "user@nas-ip:/path/to/nas/directory1/"
+    "user@nas-ip:/path/to/nas/directory2/"
+    ...
+)
+```
 
  This file specifies the source directories on your local system and the corresponding destination paths on your NAS where the backups will be stored.
- This should be located in the same directory as your backup script
 
-```bash
-declare -a SRC=(
-    "path to source 1"
-    "path to source 2"    
-)
-
-declare -a DST=(
-    "path to destination 1"
-    "path to destination 2"    
-)
-```
-
-Replace i with the index number and /path/to/source/directory/i and /path/to/destination/directory/i with your actual directory paths. You can add as many source-destination pairs as you need by incrementing the index i.
-
-For example:
-
-```bash
-declare -a SRC=(
-    "/path/to/local/source1/"
-    "/path/to/local/source2/"
-)
-
-declare -a DST=(
-    "user@nas:/path/to/nas/destination1/"
-    "user@nas:/path/to/nas/destination2/"
-)
-
-```
+### Customize the Paths
+Replace /path/to/local/directory1/, /path/to/local/directory2/, etc., with the actual paths of the directories on your local system you wish to back up.
+Replace user@nas-ip:/path/to/nas/directory1/, user@nas-ip:/path/to/nas/directory2/, etc., with the appropriate SSH-accessible paths on your NAS where each local directory should be backed up.
 
 ## Running the script
 
