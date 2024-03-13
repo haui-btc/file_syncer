@@ -17,7 +17,7 @@ handle_error() {
 trap 'handle_error $LINENO' ERR
 
 # Load source and destination folders from a configuration file
-source paths.conf
+source /home/haui/Documents/IT/PROGRAMMIEREN/file_syncer/paths.conf
 
 # Rsync options with --chmod for setting permissions explicitly
 OPTS="-auvO --chmod=Du=rwx,Dg=rwx,Do=rx,Fu=rw,Fg=rw,Fo=r --stats"
@@ -58,7 +58,7 @@ for i in "${!SRC[@]}"; do
   # Print the result for each source and destination
   echo
   echo "| Copying finished for Source ${SRC[$i]}"
-  echo "| Copied $NUM_FILES files"
+  echo "|-> Copied $NUM_FILES file(s)"
   echo
 
   # Remove the tmp files
