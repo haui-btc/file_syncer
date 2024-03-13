@@ -19,31 +19,28 @@ trap 'handle_error $LINENO' ERR
 # Load source and destination folders from a configuration file
 source paths.conf
 
-# Save the Foldername in a variable
-BASE1=$(basename "$SRC1")
-BASE2=$(basename "$SRC2")
-
-# Rsync options
-OPTS="-au --stats"
+# Rsync options with --chmod for setting permissions explicitly
+OPTS="-auvO --chmod=Du=rwx,Dg=rwx,Do=rx,Fu=rw,Fg=rw,Fo=r --stats"
 
 # Function for the spinner
 spinner() {
     local pid=$1
     local delay=0.75
-    local spinstr='|/-\'
-    while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
+    local spinstr='|/-\\'
+    while [ "$(ps a | awk '{print $1}' | grep -w $pid)" ]; do
         local temp=${spinstr#?}
-        printf "Script is running %c" "$spinstr"
+        printf " [%c]  " "$spinstr"
         local spinstr=$temp${spinstr%"$temp"}
         sleep $delay
-        printf "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b"
+        printf "\b\b\b\b\b\b"
     done
-    printf "                            \b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b"
+    printf "       \b\b\b\b\b\b"
 }
 
 # Loop over each source and destination
 for i in "${!SRC[@]}"; do
-  # Execute rsync in the background and save the output
+  echo "Backup files from ${SRC[$i]} to ${DST[$i]}"
+  # Execute rsync in the background and redirect stderr to stdout for filtering
   rsync $OPTS "${SRC[$i]}" "${DST[$i]}" 2>&1 | grep -v 'failed: Invalid argument (22)' > /tmp/out$i & PID=$!
   
   # Start the spinner
@@ -51,9 +48,6 @@ for i in "${!SRC[@]}"; do
   
   # Wait for rsync to finish
   wait $PID
-  
-  # Save the folder name in a variable
-  BASE=$(basename "${SRC[$i]}")
   
   # Read the output from the tmp files
   OUT=$(cat /tmp/out$i)
@@ -63,10 +57,9 @@ for i in "${!SRC[@]}"; do
   
   # Print the result for each source and destination
   echo
-  echo ##########################################
-  echo "<<<< Copying finished for Source $i >>>>"
-  echo "--> Copied $NUM_FILES files to $BASE"
-  echo ------------------------------------------
+  echo "| Copying finished for Source ${SRC[$i]}"
+  echo "| Copied $NUM_FILES files"
+  echo
 
   # Remove the tmp files
   rm /tmp/out$i
@@ -80,4 +73,4 @@ DURATION=$((END - START))
 
 # Print total time taken
 echo "Time taken: $DURATION seconds"
-echo
+
