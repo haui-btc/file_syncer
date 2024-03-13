@@ -101,4 +101,16 @@ backup
 
 ## Error Handling
 
-The script uses a trap command to catch errors and will print the line number where the error occurred.
+The script ensures robust and user-friendly error handling:
+
+- **Immediate Exit on Error**: Utilizes `set -e` to halt execution at the first sign of trouble, preventing cascading failures.
+
+- **Custom Error Reporting**: Implements a `handle_error()` function, invoked with `trap` on any error, to report the precise line where an issue occurs, facilitating quicker diagnostics.
+
+- **Operation Feedback**: Outputs detailed information post-backup, including the number of files transferred, for user verification and troubleshooting.
+
+- **Temporary File Management**: Generates and subsequently cleans up temporary files for each backup operation, ensuring a tidy environment and aiding in error analysis if needed.
+
+This streamlined error handling framework enhances the script's reliability, making it easier to use and maintain.
+
+
