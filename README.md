@@ -4,21 +4,28 @@ This repository contains a bash script that uses rsync for synchronizing files b
 
 ## How it works
 
-The script performs the following tasks:
-
-1. Loads source and destination paths from paths.conf.
-2. Loops over each source-destination pair and uses rsync to copy files from each source to its corresponding destination directory.
-3. Provides a spinning progress indicator while the copying operation is ongoing for each pair.
-4. Calculates and displays the number of files copied and the total time taken for all operations.
+- This project utilizes a Bash script for automating the file backup process from a local computer to a NAS (Network-Attached Storage).
+- The core of the synchronization is handled by rsync, a powerful tool that ensures only the differences (new or updated files) are transferred. This efficiency reduces both the time needed for backups and the overall network traffic.
+- It allows for explicit control over file permissions and ownership when files are copied to the NAS, making sure that files are both accessible and manageable according to user preferences or requirements.
 
 ## Configuration
 
-The paths.conf file should contain the source and destination directories for the rsync operations in the following format:
-(rename 'paths_template.conf' to 'paths.conf')
+To configure the script for your environment, you need to create a paths.conf file.
+> rename 'paths_template.conf' to 'paths.conf'
+
+ This file specifies the source directories on your local system and the corresponding destination paths on your NAS where the backups will be stored.
+ This should be located in the same directory as your backup script
 
 ```bash
-SRC[i]="/path/to/source/directory/i"
-DST[i]="/path/to/destination/directory/"
+declare -a SRC=(
+    "path to source 1"
+    "path to source 2"    
+)
+
+declare -a DST=(
+    "path to destination 1"
+    "path to destination 2"    
+)
 ```
 
 Replace i with the index number and /path/to/source/directory/i and /path/to/destination/directory/i with your actual directory paths. You can add as many source-destination pairs as you need by incrementing the index i.
@@ -26,11 +33,16 @@ Replace i with the index number and /path/to/source/directory/i and /path/to/des
 For example:
 
 ```bash
-SRC[0]="/home/username/documents/"
-DST[0]="/media/username/backup/"
+declare -a SRC=(
+    "/path/to/local/source1/"
+    "/path/to/local/source2/"
+)
 
-SRC[1]="/home/username/pictures/"
-DST[1]="/media/username/backup/"
+declare -a DST=(
+    "user@nas:/path/to/nas/destination1/"
+    "user@nas:/path/to/nas/destination2/"
+)
+
 ```
 
 ## Running the script
