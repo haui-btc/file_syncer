@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Farben definieren
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+CYAN='\033[0;36m'
+NC='\033[0m' # No Color
+
 # Get start time
 START=$(date +%s)
 
@@ -17,7 +24,7 @@ handle_error() {
 trap 'handle_error $LINENO' ERR
 
 # Load source and destination folders from a configuration file
-source /home/haui/Documents/IT/PROGRAMMIEREN/file_syncer/paths.conf
+source /home/haui/Documents/IT/Coding/file_syncer/paths.conf
 
 # Rsync options with --chmod for setting permissions explicitly
 OPTS="-auvO --chmod=Du=rwx,Dg=rwx,Do=rx,Fu=rw,Fg=rw,Fo=r --stats"
@@ -39,8 +46,9 @@ spinner() {
 
 # Loop over each source and destination
 for i in "${!SRC[@]}"; do
-  echo "Backup files from ${SRC[$i]} to ${DST[$i]}"
-  # Execute rsync in the background and redirect stderr to stdout for filtering
+  echo -e "${CYAN}📁 Backup von:${NC} ${SRC[$i]}"
+  echo -e "${CYAN}📁 Nach:     ${NC} ${DST[$i]}"
+  echo -e "${YELLOW}⏳ Starte Backup...${NC}"
   rsync $OPTS "${SRC[$i]}" "${DST[$i]}" 2>&1 | grep -v 'failed: Invalid argument (22)' > /tmp/out$i & PID=$!
   
   # Start the spinner
@@ -57,8 +65,11 @@ for i in "${!SRC[@]}"; do
   
   # Print the result for each source and destination
   echo
-  echo "| Copying finished for Source ${SRC[$i]}"
-  echo "|-> Copied $NUM_FILES file(s)"
+  if [[ -z "$NUM_FILES" ]]; then
+    NUM_FILES=0
+  fi
+  echo -e "${GREEN}✅ Backup abgeschlossen für:${NC} ${SRC[$i]}"
+  echo -e "${GREEN}📦 Kopiert: $NUM_FILES Datei(en)${NC}"
   echo
 
   # Remove the tmp files
@@ -72,5 +83,5 @@ END=$(date +%s)
 DURATION=$((END - START))
 
 # Print total time taken
-echo "Time taken: $DURATION seconds"
+echo -e "${CYAN}⏱️  Gesamtdauer: $DURATION Sekunden${NC}"
 
