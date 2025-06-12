@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Farben definieren
+# Define colors
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 YELLOW='\033[1;33m'
@@ -44,11 +44,14 @@ spinner() {
     printf "       \b\b\b\b\b\b"
 }
 
+# Array to store the number of files copied for each folder
+declare -a FILES_COPIED
+
 # Loop over each source and destination
 for i in "${!SRC[@]}"; do
-  echo -e "${CYAN}📁 Backup von:${NC} ${SRC[$i]}"
-  echo -e "${CYAN}📁 Nach:     ${NC} ${DST[$i]}"
-  echo -e "${YELLOW}⏳ Starte Backup...${NC}"
+  echo -e "${CYAN}📁 Backup from:${NC} ${SRC[$i]}"
+  echo -e "${CYAN}📁 To:        ${NC} ${DST[$i]}"
+  echo -e "${YELLOW}⏳ Starting backup...${NC}"
   rsync $OPTS "${SRC[$i]}" "${DST[$i]}" 2>&1 | grep -v 'failed: Invalid argument (22)' > /tmp/out$i & PID=$!
   
   # Start the spinner
@@ -63,13 +66,16 @@ for i in "${!SRC[@]}"; do
   # Use grep to extract the number of files transferred
   NUM_FILES=$(echo "$OUT" | grep 'Number of regular files transferred' | awk '{print $6 }')
   
-  # Print the result for each source and destination
-  echo
+  # Store the number of files copied
   if [[ -z "$NUM_FILES" ]]; then
     NUM_FILES=0
   fi
-  echo -e "${GREEN}✅ Backup abgeschlossen für:${NC} ${SRC[$i]}"
-  echo -e "${GREEN}📦 Kopiert: $NUM_FILES Datei(en)${NC}"
+  FILES_COPIED[$i]=$NUM_FILES
+  
+  # Print the result for each source and destination
+  echo
+  echo -e "${GREEN}✅ Backup completed for:${NC} ${SRC[$i]}"
+  echo -e "${GREEN}📦 Copied: $NUM_FILES file(s)${NC}"
   echo
 
   # Remove the tmp files
@@ -82,6 +88,12 @@ END=$(date +%s)
 # Calculate duration
 DURATION=$((END - START))
 
-# Print total time taken
-echo -e "${CYAN}⏱️  Gesamtdauer: $DURATION Sekunden${NC}"
+# Print summary
+echo -e "\n${CYAN}📊 Summary:${NC}"
+echo -e "${CYAN}==================${NC}"
+for i in "${!SRC[@]}"; do
+  echo -e "${GREEN}📁 ${SRC[$i]}${NC}"
+  echo -e "   → ${FILES_COPIED[$i]} file(s) copied"
+done
+echo -e "\n${CYAN}⏱️  Total duration: $DURATION seconds${NC}"
 
