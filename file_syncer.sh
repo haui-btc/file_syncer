@@ -24,7 +24,7 @@ handle_error() {
 trap 'handle_error $LINENO' ERR
 
 # Load source and destination folders from a configuration file
-source /home/haui/Documents/IT/coding/file_syncer/paths.conf
+source "$(dirname "$0")/paths.conf"
 
 # Rsync options with --chmod for setting permissions explicitly
 OPTS="-auvO --chmod=Du=rwx,Dg=rwx,Do=rx,Fu=rw,Fg=rw,Fo=r --stats"
